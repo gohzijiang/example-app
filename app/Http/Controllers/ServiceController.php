@@ -12,6 +12,11 @@ class ServiceController extends Controller
         return view('service.index', compact('services'));
     }
 
+    public function create()
+    {
+        return view('create_service');
+    }
+
     public function store(Request $request)
     {
         // 在这里处理保存服务的逻辑

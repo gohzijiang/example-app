@@ -33,10 +33,8 @@ require __DIR__.'/auth.php';
 
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    // 管理员需要登录才能访问的路由
     Route::get('/admin/dashboard', 'AdminController@dashboard');
 });
-
 
 Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
 Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
