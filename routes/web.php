@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ServiceController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,4 +39,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
 Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
-Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+
+
+//test 
+
+use App\Http\Controllers\TestController;
+
+Route::get('/test', [TestController::class, 'index'])->name('test.index');
+Route::get('/test/create', [TestController::class, 'create'])->name('test.create');
+Route::post('/test/tryStore', [TestController::class, 'submitForm'])->name('test.tryStore');
+
