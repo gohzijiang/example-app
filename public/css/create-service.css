@@ -29,6 +29,8 @@ label {
 
 input,
 textarea {
+    color: #000; /* 添加这一行以设置文字颜色为黑色 */
+    /* 其他样式规则保持不变 */
     width: 100%;
     padding: 8px;
     margin-bottom: 16px;

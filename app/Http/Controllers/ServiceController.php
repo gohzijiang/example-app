@@ -11,19 +11,26 @@ class ServiceController extends Controller
     {
         return view('admin.insertService');
     }
-    /*
-    public function store(Request $request)
-    {
-        // 在这里处理保存服务的逻辑
-        // $request 包含从表单提交的数据
-        $validatedData = $request->validate([
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'required|numeric',
-            'duration' => 'required|integer',
-        ]);
 
-        return redirect()->route('services.index')->with('success', 'Service created successfully!');
-    }
-    */
+    public function store(Request $request)
+{
+    // 在这里处理保存服务的逻辑
+    // $request 包含从表单提交的数据
+    $validatedData = $request->validate([
+        'name' => 'required|string',
+        'description' => 'required|string',
+        'price' => 'required|numeric',
+        'duration' => 'required|integer',
+    ]);
+
+    \Log::info('Attempting to create service', $validatedData);
+
+    $service = Service::create($validatedData);
+
+    \Log::info('Service created successfully:', $service->toArray());
+
+    return redirect()->route('services.index')->with('success', 'Service created successfully!');
+}
+
+    
 }

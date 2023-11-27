@@ -1,9 +1,8 @@
-
 @extends('layouts.app')
 
 @section('content')
 
-
+<link rel="stylesheet" href="{{ asset('css/create-service.css') }}"/>
 <h2>Create a New Service</h2>
 
 <form method="POST" action="{{ route('services.store') }}">
@@ -21,9 +20,9 @@
     <label for="duration">Duration (minutes):</label>
     <input type="number" name="duration" required>
 
-
     <button type="submit">Create Service</button>
 </form>
 @endsection
+
 
 
