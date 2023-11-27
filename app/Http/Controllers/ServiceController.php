@@ -6,17 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 class ServiceController extends Controller
 {
-    public function index()
-    {
-        $services = Service::all();
-        return view('service.index', compact('services'));
-    }
 
     public function create()
     {
-        return view('create_service');
+        return view('admin.insertService');
     }
-
+    /*
     public function store(Request $request)
     {
         // 在这里处理保存服务的逻辑
@@ -30,5 +25,5 @@ class ServiceController extends Controller
 
         return redirect()->route('services.index')->with('success', 'Service created successfully!');
     }
-    
+    */
 }

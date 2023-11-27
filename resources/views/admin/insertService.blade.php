@@ -2,6 +2,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+
 <h2>Create a New Service</h2>
 
 <form method="POST" action="{{ route('services.store') }}">
@@ -22,6 +24,6 @@
 
     <button type="submit">Create Service</button>
 </form>
-
-
 @endsection
+
+

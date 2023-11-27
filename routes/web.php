@@ -37,15 +37,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', 'AdminController@dashboard');
 });
 
-Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
-Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
+Route::get('admin/insertService', [ServiceController::class, 'create'])->name('services.create');
+Route::post('admin/services', [ServiceController::class, 'store'])->name('services.store'); 
+
 
 
 //test 
-
+/*
 use App\Http\Controllers\TestController;
-
 Route::get('/test', [TestController::class, 'index'])->name('test.index');
 Route::get('/test/create', [TestController::class, 'create'])->name('test.create');
 Route::post('/test/tryStore', [TestController::class, 'submitForm'])->name('test.tryStore');
+*/
 
+
+/*
+Route::get('admin/insertCategory', [App\Http\Controllers\CategoryController::class, 'insert'])->name('insert.Category');
+Route::post('admin/insertCategory/store', [App\Http\Controllers\CategoryController::class, 'store'])->name('add.Category');
+Route::get('admin/showCategory', [App\Http\Controllers\CategoryController::class, 'show'])->name('show.Category');
+Route::get('admin/deleteCategory/{id}', [App\Http\Controllers\CategoryController::class, 'delete'])->name('delete.Category');
+*/
