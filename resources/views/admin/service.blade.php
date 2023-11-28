@@ -10,14 +10,15 @@
 
     <header>
         <h1>Welcome to Your Car Wash Services</h1>
-        <nav>
-            <ul>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#booking">Booking</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+        @if($services->isEmpty())
+        <p>No services available.</p>
+            @else
+                <ul>
+                    @foreach($services as $service)
+                        <li>{{ $service->name }} - {{ $service->description }} - Price: ${{ $service->price }} - Duration: {{ $service->duration }} minutes</li>
+                    @endforeach
+                </ul>
+            @endif
     </header>
 
     <section id="services">

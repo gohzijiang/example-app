@@ -12,6 +12,17 @@ class ServiceController extends Controller
         return view('admin.insertService');
     }
 
+    public function index()
+{
+    // 获取所有服务
+    $services = Service::all();
+
+    // 将服务数据传递给视图
+    return view('admin.service', compact('services'));
+
+}
+
+
     public function store(Request $request)
 {
     // 在这里处理保存服务的逻辑
