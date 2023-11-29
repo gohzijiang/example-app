@@ -48,6 +48,9 @@ Route::get('/bookings/{booking}', [BookingController::class, 'show']);
 Route::get('/bookings', [BookingController::class, 'index']);
 
 
+Route::get('user/booking', [BookingController::class, 'index'])->name('booking');
+Route::post('/bookings', [BookingController::class, 'store'])->name('booking.store');
+
 
 
 /*
