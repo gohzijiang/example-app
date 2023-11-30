@@ -14,6 +14,10 @@ public function create()
     // 返回预订表单页面
     $services = Service::all();
     return view('user.booking', compact('services'));
+    $serviceDuration = Service::find($serviceId)->duration; // 假设你有一个服务ID来标识所选服务
+
+    // 计算可用的时间槽
+    $availableTimeSlots = $this->calculateAvailableTimeSlots($serviceDuration);
 }
 
 
