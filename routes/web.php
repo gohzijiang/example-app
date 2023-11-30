@@ -39,14 +39,22 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::get('admin/insertService', [ServiceController::class, 'create'])->name('services.create');
 Route::post('admin/services', [ServiceController::class, 'store'])->name('services.store'); 
+Route::post('/bookings', [BookingController::class,'create'])->name('bookings.store');
 Route::get('/service', [ServiceController::class, 'index'])->name('services.index');
 
 
-Route::get('/bookings/create', [BookingController::class, 'create']);
-Route::post('/bookings', [BookingController::class, 'store']);
-Route::get('/bookings/{booking}', [BookingController::class, 'show']);
-Route::get('/bookings', [BookingController::class, 'index']);
 
+
+Route::get('/bookings/create', [BookingController::class, 'create']);
+Route::get('/bookings', [BookingController::class, 'index']);
+Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('/booking/details/{booking}', [BookingController::class, 'showDetails'])->name('booking.details');
+
+/*
+Route::post('/bookings/store', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+
+/*
 
 Route::get('user/booking', [BookingController::class, 'index'])->name('booking');
 Route::post('/bookings', [BookingController::class, 'store'])->name('booking.store');

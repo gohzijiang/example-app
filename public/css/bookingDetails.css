@@ -1,0 +1,66 @@
+/* Reset default browser styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f6f6f6;
+}
+
+.booking-details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.booking-details-table th,
+.booking-details-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.booking-details-table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.booking-details-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Colorful Additions */
+.booking-details-table th {
+    background-color: #f06292; /* Mixed Orange */
+    color: white;
+}
+
+.booking-details-table tr:nth-child(even) {
+    background-color: #b3e5fc; /* Light Blue */
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* 100% viewport height */
+    margin: 0;
+    background-color: #f6f6f6; /* 设置背景颜色 */
+}
+
+.container {
+    width: 80%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #fff; /* 设置容器背景颜色 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+}

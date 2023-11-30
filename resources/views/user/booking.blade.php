@@ -68,8 +68,29 @@
                 @enderror
             </div>
 
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" autocomplete="address" autofocus>
+                @error('address')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="note">Note</label>
+                <textarea id="note" class="form-control @error('note') is-invalid @enderror" name="note" autocomplete="note" autofocus>{{ old('note') }}</textarea>
+                @error('note')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
             <button type="submit" class="btn btn-primary">Book</button>
-        </form>
-    </div>
+
+
+                
 </body>
 </html>
