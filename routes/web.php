@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CarWashingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,6 +50,15 @@ Route::get('/bookings/create', [BookingController::class, 'create']);
 Route::get('/bookings', [BookingController::class, 'index']);
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/booking/details/{booking}', [BookingController::class, 'showDetails'])->name('booking.details');
+
+
+
+// routes/web.php
+
+
+Route::post('/admin/create-business', [CarWashingController::class, 'createBusiness'])->name('createBusiness');
+Route::get('/admin/business-form', [CarWashingController::class, 'showBusinessForm'])->name('businessForm');
+Route::post('/admin/save-business', [CarWashingController::class, 'saveBusiness'])->name('saveBusiness');
 
 /*
 Route::post('/bookings/store', [BookingController::class, 'store'])->name('bookings.store');
