@@ -52,6 +52,8 @@ Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.st
 Route::get('/booking/details/{booking}', [BookingController::class, 'showDetails'])->name('booking.details');
 
 
+Route::get('/getAvailableIndustrialLines/{date}', [CarWashingController::class, 'getAvailableIndustrialLines']);
+
 
 // routes/web.php
 

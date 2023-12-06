@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Booking;
 
+// user booking 页面
 class BookingController extends Controller
 {
     // 在 BookingController 中
@@ -13,11 +14,12 @@ public function create()
 {
     // 返回预订表单页面
     $services = Service::all();
-    return view('user.booking', compact('services'));
-    $serviceDuration = Service::find($serviceId)->duration; // 假设你有一个服务ID来标识所选服务
 
-    // 计算可用的时间槽
-    $availableTimeSlots = $this->calculateAvailableTimeSlots($serviceDuration);
+    $openTime = "08:00";
+    $closeTime = "19:00";
+     // 存储这些值到 session
+     session(['openTime' => $openTime, 'closeTime' => $closeTime]);
+    return view('user.booking', compact('services'));
 }
 
 

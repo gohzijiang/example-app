@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\BookingTime;
+use App\Models\CarWashingBusiness;
+
 class BookingTimeController extends Controller
 {
-    public function index()
+/*   public function index()
     {
         $bookingTimes = BookingTime::all();
         return view('booking_times.index', compact('bookingTimes'));
@@ -30,5 +32,6 @@ class BookingTimeController extends Controller
 
         return redirect()->route('booking_times.index')->with('success', 'Booking time created successfully.');
     }
-
+*/
+  
 }

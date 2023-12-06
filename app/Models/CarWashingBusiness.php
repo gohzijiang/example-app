@@ -11,6 +11,7 @@ class CarWashingBusiness extends Model
         'industrial_lines',
         'open_time',
         'close_time',
+        'date',        // 添加 'date' 字段
     ];
-
 }
+

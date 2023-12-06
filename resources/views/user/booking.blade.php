@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking</title>
     <link rel="stylesheet" href="{{ asset('css/booking.css') }}">
-</head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <body>
     <div class="container">
         <h1>Booking Details</h1>
-
+        <div id="available_lines_count">
+        </div>
         <form method="POST" action="{{ route('bookings.store') }}">
             @csrf
 
@@ -27,6 +28,7 @@
                     </span>
                 @enderror
             </div>
+
 
             <div class="form-group">
                 <label for="booking_datetime">Booking Date and Time</label>
@@ -87,10 +89,61 @@
                     </span>
                 @enderror
             </div>
-
+            
             <button type="submit" class="btn btn-primary">Book</button>
 
-
+           
                 
 </body>
 </html>
+
+
+<script>
+
+var openTime = '{{ session('openTime') }}';
+var closeTime = '{{ session('closeTime') }}';
+    document.addEventListener("DOMContentLoaded", function () {
+        // 监听日期选择框的变化
+        document.getElementById('booking_datetime').addEventListener('change', function() {
+            // 获取选择的日期
+            var selectedDate = this.value;
+
+            // 发送 AJAX 请求，获取当天的工业线数量
+            $.ajax({
+                type: 'GET',
+                url: '/getAvailableIndustrialLines/' + selectedDate,
+                success: function (response) {
+                    var availableLines = response.availableLines;
+
+                    // 更新页面上显示的工业线数量
+                    document.getElementById('available_lines_count').innerText = availableLines;
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });           
+        });
+    });
+
+   
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // 监听预约时间输入框的变化
+        document.getElementById('booking_datetime').addEventListener('change', function() {
+            // 获取选择的日期和时间
+            var selectedDateTime = new Date(this.value);
+            // 将 openTime、closeTime 和 closeTimeBeforeOneHour 转换为 Date 对象
+            var closeTimeBeforeOneHour = document.getElementById('closeTimeBeforeOneHour').value;
+            var openTimeObj = new Date('1970-01-01 ' + openTime);
+            var closeTimeObj = new Date('1970-01-01 ' + closeTime);
+            var closeTimeBeforeOneHourObj = new Date('1970-01-01 ' + closeTimeBeforeOneHour);
+            
+            // 检查选择的时间是否在 openTime 和 closeTime 之间，且最迟只能选择 closeTime 的前一个小时
+            if (selectedDateTime < openTimeObj || selectedDateTime > closeTimeObj || selectedDateTime > closeTimeBeforeOneHourObj) {
+                alert('请选择在 ' + openTime + ' 和 ' + closeTimeBeforeOneHour + ' 之间的时间。');
+                // 清空选择的时间
+                this.value = '';
+            }
+        });
+    });
+</script>
