@@ -7,12 +7,15 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function dashboard()
-    {
-        if (auth()->user()->is_admin) {
-            return View::make('admin_dashboard');
-        } else {
-            return View::make('user_dashboard');
-        }
+{
+    $user = auth()->user();
+
+    if ($user->is_admin || $user->role == 'admin') {
+        return view('admin_dashboard');
+    } else {
+        return view('user_dashboard');
     }
+}
+
     
 }
