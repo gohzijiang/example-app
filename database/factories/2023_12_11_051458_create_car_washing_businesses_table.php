@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('car_washing_businesses', function (Blueprint $table) {
             $table->id();
+            $table->date('dates');
             $table->integer('industrial_lines');
             $table->time('open_time');
             $table->time('close_time');
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      */
