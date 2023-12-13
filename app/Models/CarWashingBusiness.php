@@ -13,12 +13,7 @@ class CarWashingBusiness extends Model
         'close_time',
         'dates', // 添加 'dates' 字段
     ];
-
-    protected $dates = ['dates']; // 修改为 'dates'，并指定为日期类型
-
-    protected $casts = [
-        'dates' => 'array',
-    ];
-
+ // 修改为 'dates'，并指定为日期类型
+    
 }
 

@@ -1,102 +1,119 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\CarWashingBusiness;
 use Illuminate\Http\Request;
-// 设置admin industrial line 等。。
+use Illuminate\Support\Carbon;
 class CarWashingController extends Controller
 {
+    // 创建业务记录
     public function createBusiness(Request $request)
     {
-        $validatedData = $request->validate([
-            'industrial_lines' => 'required|integer',
-            'dates' => 'required|date_format:Y-m-d',
-            'open_time' => 'required|date_format:H:i',
-            'close_time' => 'required|date_format:H:i|after:open_time',
-        ]); 
-
-          // 添加以下行来调试验证后的数据
-          dd($validatedData);
-
-        // 将日期和时间合并到 open_time 和 close_time
-        $validatedData['open_time'] = $validatedData['dates'] . ' ' . $validatedData['open_time'];
-        $validatedData['close_time'] = $validatedData['dates'] . ' ' . $validatedData['close_time'];
-        
-
-
-        // 现在，您可以创建 CarWashingBusiness 记录
-        CarWashingBusiness::create($validatedData);
-
-        return response()->json(['message' => '汽车清洗业务创建成功']);
-    }
-
-
-    public function showBusinessForm()
-    {
-        return view('admin.CarWashingBusiness');
+        try {
+            // 验证请求数据
+            $validatedData = $request->validate([
+                'industrial_lines' => 'required|integer|min:1|max:4',
+                'dates' => 'required|array',
+                'open_time' => 'required|date_format:H:i',
+                'close_time' => 'required|date_format:H:i|after:open_time',
+            ]);
+            $datesString = $validatedData['dates'];
+           // $dates = explode(',', $datesString);
+          
+            $businessData = [];
+    
+            // 创建 CarWashingBusiness 记录
+            foreach ($datesArray as $date) {
+                // 存储数据到 $businessData 数组
+                $businessData[] = [
+                    'industrial_lines' => $validatedData['industrial_lines'],
+                    'dates' => $date,
+                    'open_time' => $validatedData['open_time'],
+                    'close_time' => $validatedData['close_time'],
+                ];
+    
+                CarWashingBusiness::create([
+                    'industrial_lines' => $validatedData['industrial_lines'],
+                    'dates' => $date,
+                    'open_time' => $validatedData['open_time'],
+                    'close_time' => $validatedData['close_time'],
+                ]);
+            }
+    
+            // 输出所有日期的详细数据
+            dd($businessData);
+    
+            return response()->json(['message' => '汽车清洗业务创建成功']);
+        } catch (\Exception $e) {
+            // 输出异常消息
+            dd($e->getMessage(), $request->all());
+        }
     }
 
     public function saveBusiness(Request $request)
-    {   
+    {
         try {
-        $validatedData = $request->validate([
-            'industrial_lines' => 'required|integer|min:1|max:4',
-            'dates' => 'required|array', // 更改为 array 规则
-            'dates.*' => 'date_format:Y-m-d', // 使用日期格式验证，* 表示数组中的每个元素
-            'open_time' => 'required|date_format:H:i',
-            'close_time' => 'required|date_format:H:i|after:open_time',
+            // 验证请求数据
+            $validatedData = $request->validate([
+                'industrial_lines' => 'required|integer|min:1|max:4',
+                'dates' => 'required|string',
+                'open_time' => 'required|date_format:H:i',
+                'close_time' => 'required|date_format:H:i|after:open_time',
+            ]);
             
-        ]); 
+         //   $dates = explode(',', $datesString);
+            $datesArray = array_unique(array_map('trim', explode(',', $validatedData['dates'])));
+            // 遍历日期数组，创建或更新 CarWashingBusiness 记录
+           foreach ($datesArray as $date) {
+            // 使用 Carbon 创建日期对象并格式化为字符串
+            $formattedDate = Carbon::parse($date)->toDateString();
+            
+            // 查找现有记录
+            $existingRecord = CarWashingBusiness::where([
+                'industrial_lines' => $validatedData['industrial_lines'],
+                'dates' => $formattedDate,
+            ])->first();
 
-        $validatedData['dates'] = explode(',', $validatedData['dates']);
-       // 添加以下行来调试验证后的数据
-    dd($validatedData);
-} catch (\Exception $e) {
-    // 输出异常消息
-    dd($e->getMessage());
-}
-        // 迭代日期数组
-        foreach ($validatedData['dates'] as $date) {
-            // 将日期和时间合并为 DateTime 对象
-            $startTime = new \DateTime($date . ' ' . $validatedData['open_time']);
-            $endTime = new \DateTime($date . ' ' . $validatedData['close_time']);
-
-            // 添加额外的验证逻辑，确保开始时间早于结束时间等等（根据你的需求进行调整）
-            if ($endTime <= $startTime) {
-                return redirect()->route('businessForm')->with('error', '结束时间必须晚于开始时间！');
-            }
-    
-            // 创建或更新数据库记录
-            $existingRecord = CarWashingBusiness::where('dates', $date)->first();
-
+            // 如果记录存在，则更新；否则创建新记录
             if ($existingRecord) {
-                // 如果存在，执行更新，包括 'industrial_lines'
                 $existingRecord->update([
                     'industrial_lines' => $validatedData['industrial_lines'],
                     'open_time' => $validatedData['open_time'],
                     'close_time' => $validatedData['close_time'],
                 ]);
             } else {
-                // 如果不存在，执行创建
                 CarWashingBusiness::create([
-                    'dates' => $date,
                     'industrial_lines' => $validatedData['industrial_lines'],
+                    'dates' => $formattedDate,
                     'open_time' => $validatedData['open_time'],
                     'close_time' => $validatedData['close_time'],
                 ]);
             }
         }
-    
-        return redirect()->route('businessForm')->with('success', 'Business setup saved successfully!');
+        dd($formattedDate);
+
+            // 其他逻辑...
+
+            return redirect()->route('businessForm')->with('success', 'Business setup saved successfully!');
+        } catch (\Exception $e) {
+            // 输出异常消息
+            dd($e->getMessage(), $request->all());
+        }
     }
-    
-    
+
+    // 其他方法...
+
+    public function showBusinessForm()
+    {
+        return view('admin.CarWashingBusiness');
+    }
+
+    // 获取指定日期的可用产业线数量
     public function getAvailableIndustrialLines($date)
     {
         $availableLines = CarWashingBusiness::where('date', $date)->count();
 
         return response()->json(['availableLines' => $availableLines]);
     }
-
-    
 }

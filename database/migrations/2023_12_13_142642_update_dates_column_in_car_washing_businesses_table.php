@@ -11,21 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('car_washing_businesses', function (Blueprint $table) {
-            $table->id();
-            $table->date('dates');
-            $table->integer('industrial_lines');
-            $table->time('open_time');
-            $table->time('close_time');
-            $table->timestamps();
+        Schema::table('car_washing_businesses', function (Blueprint $table) {
+            $table->date('dates')->change();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('car_washing_businesses');
+        Schema::table('car_washing_businesses', function (Blueprint $table) {
+            //
+        });
     }
 };
