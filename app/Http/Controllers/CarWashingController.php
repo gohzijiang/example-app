@@ -68,20 +68,17 @@ class CarWashingController extends Controller
            foreach ($datesArray as $date) {
             // 使用 Carbon 创建日期对象并格式化为字符串
             $formattedDate = Carbon::parse($date)->toDateString();
-            
+
             // 查找现有记录
             $existingRecord = CarWashingBusiness::where([
-                'industrial_lines' => $validatedData['industrial_lines'],
-                'dates' => $formattedDate,
+                'dates' => Carbon::parse($formattedDate)->toDateString(),
             ])->first();
-
-            // 如果记录存在，则更新；否则创建新记录
-            if ($existingRecord) {
-                $existingRecord->update([
-                    'industrial_lines' => $validatedData['industrial_lines'],
-                    'open_time' => $validatedData['open_time'],
-                    'close_time' => $validatedData['close_time'],
-                ]);
+                if ($existingRecord) {
+                    $existingRecord->update([
+                        'industrial_lines' => $validatedData['industrial_lines'],
+                        'open_time' => $validatedData['open_time'],
+                        'close_time' => $validatedData['close_time'],
+                    ]);
             } else {
                 CarWashingBusiness::create([
                     'industrial_lines' => $validatedData['industrial_lines'],
@@ -91,7 +88,7 @@ class CarWashingController extends Controller
                 ]);
             }
         }
-        dd($formattedDate);
+        
 
             // 其他逻辑...
 
