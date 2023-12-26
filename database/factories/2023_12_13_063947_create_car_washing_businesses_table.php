@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('car_washing_businesses', function (Blueprint $table) {
             $table->id();
-            $table->json('dates');
+            $table->date('dates');
             $table->integer('industrial_lines');
             $table->time('open_time');
             $table->time('close_time');

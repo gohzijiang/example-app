@@ -12,94 +12,91 @@
         <div id="available_lines_count">
         </div>
         <form method="POST" action="{{ route('bookings.store') }}">
-            @csrf
+    @csrf
 
-            <div class="form-group">
-                <label for="service_id">Service</label>
-                <select id="service_id" type="text" class="form-control @error('service_id') is-invalid @enderror" name="service_id" value="{{ old('service_id') }}" required autocomplete="service_id" autofocus>
-                    <option value="">-- Select Service --</option>
-                    @foreach($services as $service)
-                        <option value="{{ $service->id }}">{{ $service->name }}</option>
-                    @endforeach
-                </select>
-                @error('service_id')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
+    <div class="form-group">
+        <label for="service_id">Service</label>
+        <select id="service_id" type="text" class="form-control @error('service_id') is-invalid @enderror" name="service_id" value="{{ old('service_id') }}" required autocomplete="service_id" autofocus>
+            <option value="">-- Select Service --</option>
+            @foreach($services as $service)
+                <option value="{{ $service->id }}">{{ $service->name }}</option>
+            @endforeach
+        </select>
+        @error('service_id')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="booking_datetime">Booking Date and Time</label>
+        <input id="booking_datetime" type="datetime-local" class="form-control @error('booking_datetime') is-invalid @enderror" name="booking_datetime" value="{{ old('booking_datetime') }}" required autocomplete="booking_datetime" autofocus>
+        @error('booking_datetime')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+        @error('name')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="phone_number">Phone Number</label>
+        <input id="phone_number" type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number') }}" required autocomplete="phone_number" autofocus>
+        @error('phone_number')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="address">Email address</label>
+        <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" autocomplete="address" autofocus>
+        @error('address')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
 
 
-            <div class="form-group">
-                <label for="booking_datetime">Booking Date and Time</label>
-                <input id="booking_datetime" type="datetime-local" class="form-control @error('booking_datetime') is-invalid @enderror" name="booking_datetime" value="{{ old('booking_datetime') }}" required autocomplete="booking_datetime" autofocus>
-                @error('booking_datetime')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="first_name">First Name</label>
-                <input id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') }}" required autocomplete="first_name" autofocus>
-                @error('first_name')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="last_name">Last Name</label>
-                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
-                @error('last_name')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="phone_number">Phone Number</label>
-                <input id="phone_number" type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number') }}" required autocomplete="phone_number" autofocus>
-                @error('phone_number')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" autocomplete="address" autofocus>
-                @error('address')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="note">Note</label>
-                <textarea id="note" class="form-control @error('note') is-invalid @enderror" name="note" autocomplete="note" autofocus>{{ old('note') }}</textarea>
-                @error('note')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            
-            <button type="submit" class="btn btn-primary">Book</button>
-
-           
-                
-</body>
+    <div class="form-group">
+        <label for="note">Note</label>
+        <textarea id="note" class="form-control @error('note') is-invalid @enderror" name="note" autocomplete="note" autofocus>{{ old('note') }}</textarea>
+        @error('note')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Book</button>
+</form>
 </html>
 
 
 <script>
+ var today = new Date();
 
+// Calculate the next day
+var nextDay = new Date(today);
+nextDay.setDate(today.getDate() + 1);
+
+// Format the next day as a string suitable for the input value
+var formattedNextDay = nextDay.toISOString().slice(0, -8);
+
+// Set the minimum value for the datetime-local input
+document.getElementById('booking_datetime').min = formattedNextDay;
 var openTime = '{{ session('openTime') }}';
 var closeTime = '{{ session('closeTime') }}';
     document.addEventListener("DOMContentLoaded", function () {

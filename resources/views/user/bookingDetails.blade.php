@@ -12,13 +12,10 @@
             <td>{{ $booking->id }}</td>
         </tr>
         <tr>
-            <th>Booking Date:</th>
-            <td>{{ $booking->booking_date }}</td>
+            <th>Booking Date Time:</th>
+            <td>{{ $booking->booking_datetime }}</td>
         </tr>
-        <tr>
-            <th>Customer Name:</th>
-            <td>{{ $booking->customer_name }}</td>
-        </tr>
+        
         <tr>
             <th>First Name:</th>
             <td>{{ $booking->first_name }}</td>

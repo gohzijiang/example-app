@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Booking extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'service_id',
         'booking_datetime',
-        'first_name',
-        'last_name',
+        'Name', // 调整为 first_name
         'phone_number',
-        'address',
+        'Email', // 调整为 email
         'note',
         'total_price',
     ];
@@ -23,5 +24,10 @@ class Booking extends Model
     public function service()
     {
         return $this->belongsTo(Service::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

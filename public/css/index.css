@@ -1,0 +1,68 @@
+html, body {
+    background-image: linear-gradient(rgba(241, 241, 241, 0.6),rgba(156, 154, 154, 0.6)),url("/image/background.PNG");
+    background-position: center;
+    background-size: cover;
+    background-position: absolute;
+    background-color: #323842;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    margin-top: 50px; /* 调整容器与顶部的距离 */
+    background-color: rgba(255, 255, 255, 0.9); /* 背景颜色，可以根据需要调整透明度 */
+    padding: 20px;
+    border-radius: 10px; /* 圆角边框 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+
+h1 {
+    font-family: 'Teko', sans-serif;
+    color: rgb(83, 86, 88);
+    text-align: center;
+}
+
+.row {
+    width: 100%;
+}
+
+.table {
+    font-family: 'Catamaran', sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%; /* 表格宽度 */
+}
+
+.table thead th {
+    border-bottom: none;
+}
+
+.table td, .table th {
+    border-top: none;
+}
+
+#table-head {
+    background-color: rgba(0, 119, 255, 0.7);
+    color: white;
+}
+
+tr td {
+    background-color: rgba(253, 250, 235, 0.596);
+}
+
+table, td, th, tr {
+    border: 3px solid rgba(0, 119, 255, 0.089);
+}
+
+tbody tr:hover {
+    background-color: rgb(255, 255, 255);
+}
+
+.btn {
+    display: block;
+    margin: 10px;
+}
+
+ul.pagination li {
+    background-color: rgba(235, 235, 235, 0.712);
+}

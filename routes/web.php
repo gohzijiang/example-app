@@ -62,6 +62,16 @@ Route::post('/admin/create-business', [CarWashingController::class, 'createBusin
 Route::get('/admin/business-form', [CarWashingController::class, 'showBusinessForm'])->name('businessForm');
 Route::post('/admin/save-business', [CarWashingController::class, 'saveBusiness'])->name('saveBusiness');
 
+Route::get('/index', [BookingController::class, 'index'])->name('bookings.index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/index', [BookingController::class, 'userIndex'])->name('user.index');});
+
+
+
+Route::get('/getOpenCloseTime', [CarWashingController::class, 'getOpenCloseTime']);
+
+Route::get('/getServiceInfo/{serviceId}', [BookingController::class, 'getServiceInfo']);
 /*
 Route::post('/bookings/store', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');

@@ -106,11 +106,33 @@ class CarWashingController extends Controller
         return view('admin.CarWashingBusiness');
     }
 
-    // 获取指定日期的可用产业线数量
-    public function getAvailableIndustrialLines($date)
-    {
-        $availableLines = CarWashingBusiness::where('date', $date)->count();
+    
+    public function getAvailableIndustrialLines($selectedDate)
+{
 
-        return response()->json(['availableLines' => $availableLines]);
+  
+    // 查询数据库，获取选择日期的工业线数量
+    $lines = CarWashingBusiness::where('dates', $selectedDate)->value('industrial_lines');  
+    // 返回 JSON 响应
+    return response()->json(['availableLines' => $lines]);
+}
+
+    public function getCarWashingInfo($selectedDate)
+    {
+        // 查询数据库，获取选择日期的 CarWashingBusiness 信息
+        $businessInfo = CarWashingBusiness::where('dates', $selectedDate)->first();
+
+        // 返回 Blade 视图
+        return view('car_washing_info', ['businessInfo' => $businessInfo]);
+    }
+
+    public function getOpenCloseTime(Request $request)
+    {
+        $selectedDate = $request->input('selected_date');
+        
+        // 在这里查询数据库，获取选定日期的开放和关闭时间
+        $timeInfo = YourModel::where('dates', $selectedDate)->first(['open_time', 'close_time']);
+
+        return response()->json($timeInfo);
     }
 }
