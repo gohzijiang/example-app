@@ -43,4 +43,18 @@ class ServiceController extends Controller
     return redirect()->route('services.index')->with('success', 'Service created successfully!');
 }
     
+public function getServiceDuration($serviceId)
+{
+    $service = Service::find($serviceId);
+
+    // 添加检查以确保 $service 不为 null
+    if ($service) {
+        // 返回 JSON 格式的数据
+        return response()->json(['duration' => $service->duration]);
+    } else {
+        // 如果没有匹配的记录，返回一个适当的响应
+        return response()->json(['error' => 'No record found for the selected service'], 404);
+    }
+}
+    
 }

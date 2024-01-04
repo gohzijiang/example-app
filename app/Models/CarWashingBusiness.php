@@ -9,9 +9,9 @@ class CarWashingBusiness extends Model
 {
     protected $fillable = [
         'industrial_lines',
+        'dates', // 添加 'dates' 字段
         'open_time',
         'close_time',
-        'dates', // 添加 'dates' 字段
     ];
  // 修改为 'dates'，并指定为日期类型
     

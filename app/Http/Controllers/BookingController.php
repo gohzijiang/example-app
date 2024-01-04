@@ -30,10 +30,10 @@ public function store(Request $request)
         'booking_datetime' => 'required|date',
         'name' => 'required',
         'phone_number' => 'required',
-        'address' => 'required|email', // Update the validation rule for email
+        'email' => 'required|email', // 将验证规则更改为 email
         'note' => 'nullable',
     ]);
-
+    
     // 获取所选择的服务
     $selectedService = Service::findOrFail($request->service_id);
 
@@ -44,18 +44,24 @@ public function store(Request $request)
     $booking = new Booking;
     $booking->service_id = $request->service_id;
     $booking->booking_datetime = $request->booking_datetime;
-    $booking->name = $request->name; // Update to use the 'name' field
-    $booking->phone_number = $request->phone_number;
-    $booking->address = $request->address;
+    $booking->name = $request->name; // 这里
+    $booking->phone_number = $request->phone_number; // 这里
+    $booking->email = $request->email; // 这里
     $booking->note = $request->note;
-    $booking->total_price = $totalPrice; // 使用计算出的 total_price
-    $booking->userID = auth()->id(); // 使用当前用户的 ID
+    $booking->total_price = $totalPrice;
+    $booking->user_id = auth()->id();
     $booking->save();
+
 
     // 重定向到 booking.details 路由，并传递预订的 ID
     return redirect()->route('booking.details', ['booking' => $booking->id]);
 }
 
+
+// 调试，查看请求的所有数据
+
+    // 重定向到 booking.details 路由，并传递预订的 ID
+   // return redirect()->route('booking.details', ['booking' => $booking->id]);
 
 
 public function showDetails(Booking $booking)

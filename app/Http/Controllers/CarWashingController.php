@@ -126,13 +126,22 @@ class CarWashingController extends Controller
         return view('car_washing_info', ['businessInfo' => $businessInfo]);
     }
 
-    public function getOpenCloseTime(Request $request)
+    public function getOpenCloseTime($selectedDate)
     {
-        $selectedDate = $request->input('selected_date');
-        
-        // 在这里查询数据库，获取选定日期的开放和关闭时间
-        $timeInfo = YourModel::where('dates', $selectedDate)->first(['open_time', 'close_time']);
-
-        return response()->json($timeInfo);
+    
+        // 查询数据库以获取选定日期的开放和关闭时间
+        $DateInfo = CarWashingBusiness::where('dates', $selectedDate)->first(['open_time', 'close_time']);
+        // 添加检查以确保 $timeInfo 不为 null
+        if ($DateInfo) {
+            // 返回 JSON 格式的数据，确保是一个数组
+           
+            return response()->json([
+                'open_time' => $DateInfo->open_time,
+                'close_time' => $DateInfo->close_time,
+            ]);
+        } else {
+            // 如果没有匹配的记录，可以返回一个适当的响应，例如：
+            return response()->json(['error' => 'No record found for the selected date'], 404);
+        }
     }
 }

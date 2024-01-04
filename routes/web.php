@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarWashingController;
+use App\Http\Controllers\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -67,11 +68,13 @@ Route::get('/index', [BookingController::class, 'index'])->name('bookings.index'
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/index', [BookingController::class, 'userIndex'])->name('user.index');});
 
+    
+Route::get('/getOpenCloseTime/{selected_date}', [CarWashingController::class, 'getOpenCloseTime']);
+Route::get('/getServiceDuration/{serviceId}', [ServiceController::class, 'getServiceDuration']);
+
+Route::post('/checkout', [PaymentController::class, 'paymentPost'])->name('checkout');
 
 
-Route::get('/getOpenCloseTime', [CarWashingController::class, 'getOpenCloseTime']);
-
-Route::get('/getServiceInfo/{serviceId}', [BookingController::class, 'getServiceInfo']);
 /*
 Route::post('/bookings/store', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');

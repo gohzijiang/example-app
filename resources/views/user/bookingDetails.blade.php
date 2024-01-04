@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1>Booking Details</h1>
+    
     <table>
         <tr>
             <th>Booking ID:</th>
@@ -40,6 +41,18 @@
             <th>Total Price:</th>
             <td>{{ $booking->total_price }}</td>
         </tr>
+
+        <tr>
+            <td colspan="2">
+                <button onclick="redirectToCheckout()">Proceed to Checkout</button>
+            </td>
+        </tr>            
+
     </table>
+    <script>
+        function redirectToCheckout() {
+            window.location.href = "{{ route('checkout') }}";
+        }
+    </script>
 </body>
 </html>
