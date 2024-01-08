@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Booking;
+use Stripe;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 // user booking 页面
 class BookingController extends Controller
 {
@@ -39,7 +40,7 @@ public function store(Request $request)
 
     // 计算 total_price
     $totalPrice = $selectedService->price;
-
+    
     // 创建一个新的预订并保存到数据库
     $booking = new Booking;
     $booking->service_id = $request->service_id;
@@ -80,6 +81,8 @@ public function index()
 }
 
 
+
+
 public function getServiceInfo($serviceId)
 {
     // 查询数据库，获取选择服务的相关信息
@@ -103,5 +106,47 @@ public function userIndex()
     // 将数据传递到视图
     return view('user.index', ['userServices' => $userServices, 'userBookings' => $userBookings]);
 }
+
+public function searchByUserName(Request $request)
+    {
+        $searchByUserName  = $request->input('searchByUserName');
+        $bookings = Booking::with('user')->whereHas('user', function ($query) use ($searchByUserName) {
+            $query->where('name', 'like', '%' . $searchByUserName . '%');
+        })->get();
+
+        return view('admin.index', compact('searchByUserName', 'bookings'));
+    }
+
+    public function searchByDateTime(Request $request)
+    {
+        $searchDate = $request->input('searchByDateTime');
+    
+        // 使用 Carbon 对象来处理日期格式
+        $searchDate = Carbon::parse($searchDate);
+    
+        // 查询数据库，找到匹配日期的预订
+        $bookings = Booking::whereDate('booking_datetime', $searchDate)->get();
+    
+        return view('admin.index', ['searchByDateTime' => $searchDate, 'bookings' => $bookings]);
+    }
+
+
+public function paymentPost(Request $request)
+{
+       
+Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+    Stripe\Charge::create ([
+            "amount" => $request->total_price * 100,   // RM10  10=10 cen 10*100=1000 cen
+            "currency" => "MYR",
+            "source" => $request->stripeToken,
+            "description" => "This payment is testing purpose of southern online",
+    ]);
+       
+    return back();
+}
+
+
+
+
 
 }

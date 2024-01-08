@@ -6,12 +6,15 @@
     <title>Booking</title>
     <link rel="stylesheet" href="{{ asset('css/booking.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
 <body>
     <div class="container">
         <h1>Booking Details</h1>
         <form method="POST" action="{{ route('bookings.store') }}">
     @csrf
 
+    <div>{{ Auth::user()->id }}</div>
+    <input type="hidden" id="user_id_input" name="user_id" value="{{ Auth::user()->id }}">
     <div class="form-group">
         <label for="service_id">Service</label>
         <select id="service_id" type="text" class="form-control @error('service_id') is-invalid @enderror" name="service_id" value="{{ old('service_id') }}" required autocomplete="service_id" autofocus>
@@ -22,9 +25,11 @@
         </select>
        
     </div>
+    
+
     <span id="serviceDuration"></span>
         <div class="form-group">
-        <label for="booking_date">Booking Date</label>
+        <label for="booking_date">Booking Date </label>
         <input id="booking_date" type="date" class="form-control @error('booking_date') is-invalid @enderror" name="booking_date" value="{{ old('booking_date') }}" required autocomplete="booking_date" autofocus>
         @error('booking_date')
             <span class="invalid-feedback" role="alert">
@@ -35,11 +40,13 @@
         <span id="openTime"></span>
         <span id="closeTime"></span>
         <span id="availableLines"></span>
-     
+        <div id="selectedTimeLabel" style="display:none;"></div>
     <div class="form-group" id="timeSlotContainer" style="height:280px; width: 700px; overflow:scroll; border: 1px solid #ddd;">
+    <label for="booking_time">Booking Time </label>
         <!-- 时间槽内容 -->
     </div>
-
+    <input type="hidden" id="booking_datetime_input" name="booking_datetime">
+    
     <div class="form-group">
         <label for="phone_number">Phone Number</label>
         <input id="phone_number" type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number') }}" required autocomplete="phone_number" autofocus>
@@ -51,7 +58,17 @@
     </div>
 
     <div class="form-group">
-        <label for="email">电子邮件地址</label>
+    <label for="name">Name</label>
+    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+    @error('name')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+    </div>  
+
+    <div class="form-group">
+        <label for="email">Email</label>
         <input id="email" type="text" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
             title="请输入有效的电子邮件地址" class="form-control @error('Email') is-invalid @enderror"
             name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
@@ -72,22 +89,24 @@
         @enderror
     </div>
     
-    <button type="submit" class="btn btn-primary">Book</button>
+    <button type="submit" class="btn btn-primary" id="submitBtn">Book</button>
 </form>
 </html>
 
 
 <script>
+var serviceDuration;
+
 $('#service_id').change(function () {
         // 获取选择的服务 ID
         var selectedServiceId = $(this).val();
-
+        
         // 发送 AJAX 请求，获取服务的持续时间
         $.ajax({
             type: 'GET',
             url: '/getServiceDuration/' + selectedServiceId,
             success: function (response) {
-                var serviceDuration = response.duration;
+                serviceDuration = response.duration;
 
                 // 在页面上显示服务的持续时间
                 var serviceDurationElement = document.getElementById('serviceDuration');
@@ -103,7 +122,12 @@ $('#service_id').change(function () {
         });
     });
 
-     document.addEventListener("DOMContentLoaded", function () {
+function getDuration() {
+    return serviceDuration; // 返回全局的 serviceDuration
+}
+getDuration();
+
+    document.addEventListener("DOMContentLoaded", function () {
     var timeSlotContainer = document.getElementById('timeSlotContainer');
     var bookingDateInput = document.getElementById('booking_date');
     // time slot select
@@ -121,8 +145,10 @@ $('#service_id').change(function () {
     // 监听日期选择框的变化
     bookingDateInput.addEventListener('change', function () {
         // 获取选择的日期
-        var selectedDate = this.value;
-
+        timeSlotContainer.innerHTML = '';
+        var selectedDate = this.value;  
+    
+            
         // 发送 AJAX 请求，获取时间槽数据
         $.when(
             $.ajax({
@@ -140,11 +166,12 @@ $('#service_id').change(function () {
                 // 显示错误消息
                 console.error(openCloseData.error);
             } else {
+     
                 // 操作正常情况下的响应
                 var openTime = new Date(selectedDate + ' ' + openCloseData.open_time);
                 var closeTime = new Date(selectedDate + ' ' + openCloseData.close_time);
-                var duration = openCloseData.duration;
-            
+                //var duration = openCloseData.duration;
+                
                 // 在页面上显示开放、关闭时间和持续时间
                 var openTimeElement = document.getElementById('openTime');
                 var closeTimeElement = document.getElementById('closeTime');
@@ -167,9 +194,10 @@ $('#service_id').change(function () {
 
                     // 清空时间槽容器
                 timeSlotContainer.innerHTML = '';
+
                 // 使用 openTime 的副本初始化 currentTime
                 var currentTime = new Date(openTime);
-              
+               
                 while (currentTime < closeTime) {
                     var timeslotDiv = document.createElement('div');
                     timeslotDiv.classList.add('timeslot');
@@ -180,27 +208,47 @@ $('#service_id').change(function () {
 
                     // 保存当前时间，以便稍后调整
                     var previousTime = new Date(currentTime);
-
                     // 增加时间槽间隔
-                    currentTime.setMinutes(currentTime.getMinutes() + duration);
-
+                    currentTime.setMinutes(currentTime.getMinutes() + getDuration());
+                  
                     // 检查是否超过或等于结束时间，如果是，则停止循环
                     if (currentTime >= closeTime) {
                         break;
                     }
                 }
-                 
+             
             }
+
+       
+    
+
         }).fail(function (error) {
             console.log(error);
         });
     });
-
+            
     function formatTime(date) {
         var hours = date.getHours().toString().padStart(2, '0');
         var minutes = date.getMinutes().toString().padStart(2, '0');
         return hours + ':' + minutes;
     }
+
+    $('#timeSlotContainer').on('click', '.timeslot', function() {
+        // 获取点击的时间槽内容
+        var selectedTime = $(this).text();
+
+        // 创建Booking Time标签
+        var bookingTimeLabel = $('<label for="booking_time">Booking Time: </label>');
+        var bookingTimeValue = $('<span>' + selectedTime + '</span>');
+
+        // 清空并添加Booking Time标签
+        $('#selectedTimeLabel').empty().append(bookingTimeLabel).append(bookingTimeValue);
+
+        // 显示新标签
+        $('#selectedTimeLabel').show();
+    });
+
+
 });
 
 
@@ -247,7 +295,46 @@ function formatDate(dateString) {
     return formattedDay + '/' + formattedMonth + '/' + year;
 }
 
-    
+$('#submitBtn').on('click', function(event) {
+    // 阻止默认的提交行为
+    event.preventDefault();
+
+    // 获取选择的服务 ID
+    var selectedServiceId = $('#service_id').val();
+
+    // 获取选择的日期和时间
+    var selectedDate = $('#booking_date').val();
+    var selectedTime = $('#selectedTimeLabel span').text();
+
+    // 结合日期和时间
+    var bookingDatetime = selectedDate + ' ' + selectedTime;
+
+    // 设置隐藏字段的值
+    $('#booking_datetime_input').val(bookingDatetime);
+
+    // 获取其他表单字段的值
+    var name = $('#name').val();
+    var phone_number = $('#phone_number').val();
+    var email = $('#email').val();
+    var note = $('#note').val();
+    var userId = $('#user_id_input').val();
+            // Check if the response contains the user_id    
+                $('#service_id').val(selectedServiceId);
+                $('#booking_datetime_input').val(bookingDatetime);
+                $('#name').val(name);
+                $('#phone_number').val(phone_number);
+                $('#email').val(email);
+                $('#note').val(note);
+                console.log('Selected Service ID: ', selectedServiceId);
+                console.log('Booking Datetime: ', bookingDatetime);
+                console.log('Name: ', name);
+                console.log('Phone Number: ', phone_number);
+                console.log('Email: ', email);
+                console.log('Note: ', note);
+                console.log('User ID: ', userId);
+                
+                $('form').submit();
+});
 
    
 </script>

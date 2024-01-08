@@ -51,11 +51,11 @@ Route::get('/bookings/create', [BookingController::class, 'create']);
 Route::get('/bookings', [BookingController::class, 'index']);
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/booking/details/{booking}', [BookingController::class, 'showDetails'])->name('booking.details');
-
-
 Route::get('/getAvailableIndustrialLines/{date}', [CarWashingController::class, 'getAvailableIndustrialLines']);
+//serachbooking
 
-
+Route::post('/search/byUserName',[BookingController::class, 'searchByUserName'] )->name('search.ByUserName');
+Route::post('/search/byDateTime', [BookingController::class, 'searchByDateTime'])->name('search.ByDateTime');
 // routes/web.php
 
 
@@ -72,9 +72,13 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/getOpenCloseTime/{selected_date}', [CarWashingController::class, 'getOpenCloseTime']);
 Route::get('/getServiceDuration/{serviceId}', [ServiceController::class, 'getServiceDuration']);
 
-Route::post('/checkout', [PaymentController::class, 'paymentPost'])->name('checkout');
 
 
+//serach function
+Route::get('/getUserIdByName/{name}', [UserController::class, 'getUserIdByName']);
+
+
+Route::post('/checkout', [BookingController::class, 'paymentPost'])->name('payment.post');
 /*
 Route::post('/bookings/store', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');

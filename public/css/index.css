@@ -1,5 +1,5 @@
 html, body {
-    background-image: linear-gradient(rgba(241, 241, 241, 0.6),rgba(156, 154, 154, 0.6)),url("/image/background.PNG");
+    background-image: linear-gradient(rgba(241, 241, 241, 0.6), rgba(156, 154, 154, 0.6)), url("/image/background.PNG");
     background-position: center;
     background-size: cover;
     background-position: absolute;
@@ -8,12 +8,13 @@ html, body {
     margin: 0;
 }
 
+
 .container {
-    margin-top: 50px; /* 调整容器与顶部的距离 */
-    background-color: rgba(255, 255, 255, 0.9); /* 背景颜色，可以根据需要调整透明度 */
+    margin-top: 50px;
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 20px;
-    border-radius: 10px; /* 圆角边框 */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -30,7 +31,7 @@ h1 {
     font-family: 'Catamaran', sans-serif;
     margin-left: auto;
     margin-right: auto;
-    width: 90%; /* 表格宽度 */
+    width: 100%; /* 修改为100%以充满父容器 */
 }
 
 .table thead th {
@@ -59,9 +60,22 @@ tbody tr:hover {
 }
 
 .btn {
-    display: block;
+    display: inline-block;
     margin: 10px;
+    background-color: #007bff; /* 蓝色背景 */
+    color: white; /* 白色文字 */
+    font-weight: bold; /* 字体加粗 */
+    padding: 8px 16px; /* 适当的内边距，可根据需要调整 */
+    border: none; /* 移除边框，如果有的话 */
+    border-radius: 5px; /* 圆角边框，可根据需要调整 */
+    cursor: pointer; /* 鼠标指针样式 */
+    text-decoration: none; /* 移除超链接下划线，如果按钮用于超链接 */
 }
+
+.btn:hover {
+    background-color: #0056b3; /* 鼠标悬停时的蓝色变化，可根据需要调整 */
+}
+
 
 ul.pagination li {
     background-color: rgba(235, 235, 235, 0.712);

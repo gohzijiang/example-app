@@ -1,40 +1,74 @@
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
 }
-
-header {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 1em 0;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin-right: 10px;
-}
-
-section {
-    padding: 20px;
-}
-
-.service {
-    margin-bottom: 20px;
-}
-
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 1em 0;
-    position: fixed;
-    bottom: 0;
+body {
+    background-image: "/image/background.PNG";
+    height: 100%;
     width: 100%;
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+}
+.container {
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* 使用视窗高度来确保满屏 */
+}
+
+.table {
+    width: 80%; /* 调整表格的宽度，可根据需要调整 */
+}
+.card, .table {
+    position: relative;
+}
+.card {
+    margin: 10%;
+}
+.table {  
+    font-family: 'Catamaran', sans-serif;
+    background-color: rgb(151, 207, 211);
+} 
+main {
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(rgba(241, 241, 241, 0.6),rgba(156, 154, 154, 0.6)),url("/image/background.PNG");
+    background-position: center;
+    background-size: cover;
+    background-color: #e1e7f1;
+    position: absolute;
+}
+h1 {
+    font-family: 'Teko', sans-serif;
+    color: rgb(83, 86, 88);
+    text-align: center;
+}
+
+.footer {
+    background-color: #666; /* 设置 footer 的背景色为灰色 */
+    color: white; /* 设置文本颜色为白色 */
+    text-align: center; /* 居中对齐 */
+    padding: 20px; /* 设置内边距 */
+    margin-top: auto; /* 你之前设定的 margin-top */
+    margin: 0;
+    padding: 20px 0; 
+}
+
+.footer-content {
+    max-width: 800px; /* 设置最大宽度，以确保内容在大屏幕上不会过宽 */
+    margin: auto; /* 居中显示 */
+}
+.footer-bottom {
+    margin-top: 20px; /* 设置底部文本的上边距 */
+}
+
+.socials {
+    list-style: none; /* 移除列表样式 */
+    padding: 0; /* 移除内边距 */
+    display: flex; /* 将列表项水平排列 */
+    justify-content: center; /* 在水平方向上居中对齐 */
+}
+
+.socials li {
+    margin: 0 10px; /* 设置列表项之间的间距 */
 }

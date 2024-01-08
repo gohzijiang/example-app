@@ -1,78 +1,125 @@
-/* 在你的 HTML 文件中添加或者保存为单独的样式文件，例如 style.css */
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-}
-
-h2 {
-    text-align: center;
-    color: #333;
-}
-
-form {
-    max-width: 400px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #555;
-}
-
-input,
-textarea {
-    color: #000; /* 添加这一行以设置文字颜色为黑色 */
-    /* 其他样式规则保持不变 */
+main {
+    height: 100%;
     width: 100%;
-    padding: 8px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button {
-    background-color: #3498db;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #2980b9;
-}
-
-/* 添加一些运动汽车感觉的样式 */
-body {
-    background-image: url('sports_car_background.jpg'); /* 请替换为实际的图片路径 */
-    background-size: cover;
+    background-image: linear-gradient(rgba(241, 241, 241, 0.6),rgba(156, 154, 154, 0.6)),url("/image/background.PNG");
     background-position: center;
-    background-repeat: no-repeat;
-    color: #fff;
+    background-position: center;
+    background-size: cover;
+    background-color: #323842;
+    position: absolute;
+    padding-bottom: 20px;
 }
+
+h1 {
+    margin: 20px;
+    font-family: 'Teko', sans-serif;
+    color: rgb(83, 86, 88);
+    text-align: center; 
+    color: rgb(78, 81, 85);
+}
+
 
 form {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    margin: auto;
 }
 
 label {
-    color: #333;
+    font-size: 40px;
+    color: rgb(69, 80, 107);
+    font-family: 'Catamaran', sans-serif;
+    text-align: left;
 }
 
-button {
-    background-color: #c0392b;
+input,textarea {
+    border: none;
+    border-radius: 5px;
+    width: 450px;
+    padding: 10px;
+    color: #333638;
+    margin-left: 65%;
 }
 
-button:hover {
-    background-color: #e74c3c;
+input {
+    height: 40px;
+    
 }
+
+input#price {
+    text-align: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}   
+
+textarea {
+    height: 150px;
+}
+
+input, textarea, select#category, input#product-image-input {
+    border: none;
+    border-radius: 5px;
+    width: 100%; /* 修改宽度为100% */
+    max-width: 450px; /* 设置最大宽度，避免在大屏幕上过宽 */
+    padding: 10px;
+    color: #333638;
+    margin: 10px auto; /* 居中显示，同时设置垂直方向上的边距 */
+}
+
+select#category, input#product-image-input {
+    width: 450px;
+    margin: auto;
+    color: #333638;
+}
+
+select#language, input#product-image-input {
+    width: 450px;
+    margin: auto;
+    color: #333638;
+}
+
+#submit-button {
+    width: 100px;
+    margin: 20px;
+    color: white;
+    background-color: rgb(78, 81, 85);
+    padding: 0px;
+    margin-left: 93%;
+}
+
+#submit-button:hover {
+    background-color: rgba(62, 62, 63, 0.336);
+}
+
+.footer {
+    background-color: #666; /* 设置 footer 的背景色为灰色 */
+    color: white; /* 设置文本颜色为白色 */
+    text-align: center; /* 居中对齐 */
+    padding: 20px; /* 设置内边距 */
+    margin-top: auto; /* 你之前设定的 margin-top */
+    margin: 0;
+    padding: 20px 0; 
+}
+
+.footer-content {
+    max-width: 800px; /* 设置最大宽度，以确保内容在大屏幕上不会过宽 */
+    margin: auto; /* 居中显示 */
+}
+.footer-bottom {
+    margin-top: 20px; /* 设置底部文本的上边距 */
+}
+
+.socials {
+    list-style: none; /* 移除列表样式 */
+    padding: 0; /* 移除内边距 */
+    display: flex; /* 将列表项水平排列 */
+    justify-content: center; /* 在水平方向上居中对齐 */
+}
+
+.socials li {
+    margin: 0 10px; /* 设置列表项之间的间距 */
+}
+
