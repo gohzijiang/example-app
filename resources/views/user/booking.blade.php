@@ -95,6 +95,7 @@
 
 
 <script>
+   
 var serviceDuration;
 
 $('#service_id').change(function () {
@@ -127,28 +128,22 @@ function getDuration() {
 }
 getDuration();
 
-    document.addEventListener("DOMContentLoaded", function () {
-    var timeSlotContainer = document.getElementById('timeSlotContainer');
+document.addEventListener("DOMContentLoaded", function () {
     var bookingDateInput = document.getElementById('booking_date');
-    // time slot select
-    var timeSlotSelect = document.getElementById('timeSlotSelect');
+    var timeSlotContainer = document.getElementById('timeSlotContainer');
+    var serviceDurationElement = document.getElementById('serviceDuration');
+
+    // 设置最小日期为明天
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var formattedTomorrow = tomorrow.toISOString().slice(0, 10);
+    bookingDateInput.min = formattedTomorrow;
+
     // 隐藏时间槽容器
     timeSlotContainer.style.display = 'none';
 
-    // 设置最小日期值
-    var today = new Date();
-    var nextDay = new Date(today);
-    nextDay.setDate(today.getDate() + 1);
-    var formattedNextDay = nextDay.toISOString().slice(0, -8);
-    document.getElementById('booking_date').min = formattedNextDay;
-
-    // 监听日期选择框的变化
-    bookingDateInput.addEventListener('change', function () {
-        // 获取选择的日期
-        timeSlotContainer.innerHTML = '';
-        var selectedDate = this.value;  
-    
-            
+    // 定义 AJAX 请求的函数
+    function performAjaxRequest(selectedDate) {
         // 发送 AJAX 请求，获取时间槽数据
         $.when(
             $.ajax({
@@ -162,42 +157,41 @@ getDuration();
         ).done(function (openCloseResponse, linesResponse) {
             // 处理获取时间槽数据的响应
             var openCloseData = openCloseResponse[0];
+
             if (openCloseData.error) {
                 // 显示错误消息
                 console.error(openCloseData.error);
+                alert('No record found for the selected date');
+                return; // 终止后续逻辑
             } else {
-     
                 // 操作正常情况下的响应
                 var openTime = new Date(selectedDate + ' ' + openCloseData.open_time);
                 var closeTime = new Date(selectedDate + ' ' + openCloseData.close_time);
-                //var duration = openCloseData.duration;
-                
+
                 // 在页面上显示开放、关闭时间和持续时间
                 var openTimeElement = document.getElementById('openTime');
                 var closeTimeElement = document.getElementById('closeTime');
-              
 
                 openTimeElement.textContent = "Open Time: " + openTime;
                 closeTimeElement.textContent = "Close Time: " + closeTime;
-    
 
                 // 处理获取工业线数量的响应
                 var linesData = linesResponse[0];
                 var availableLines = linesData.availableLines;
+
                 // 在页面上显示工业线数量
                 var linesElement = document.getElementById('availableLines');
                 linesElement.textContent = "Available Industrial Lines: " + availableLines;
 
-
-                  // 显示时间槽容器
+                // 显示时间槽容器
                 timeSlotContainer.style.display = 'block';
 
-                    // 清空时间槽容器
+                // 清空时间槽容器
                 timeSlotContainer.innerHTML = '';
 
                 // 使用 openTime 的副本初始化 currentTime
                 var currentTime = new Date(openTime);
-               
+
                 while (currentTime < closeTime) {
                     var timeslotDiv = document.createElement('div');
                     timeslotDiv.classList.add('timeslot');
@@ -210,22 +204,54 @@ getDuration();
                     var previousTime = new Date(currentTime);
                     // 增加时间槽间隔
                     currentTime.setMinutes(currentTime.getMinutes() + getDuration());
-                  
+
                     // 检查是否超过或等于结束时间，如果是，则停止循环
                     if (currentTime >= closeTime) {
                         break;
                     }
                 }
-             
             }
+        }).fail(function (error) {
+            // 处理请求失败
+            alert('This day hasn\'t been set for online booking yet!');
+        });
+    }
 
-       
+    // 页面加载时执行一次
     
 
-        }).fail(function (error) {
-            console.log(error);
-        });
+    // 监听日期选择框的变化
+    bookingDateInput.addEventListener('change', function () {
+        // 获取选择的日期
+        timeSlotContainer.innerHTML = '';
+        var selectedDate = this.value;
+        var currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+
+        // 检查所选日期是否在当前日期及之后
+        if (selectedDate < currentDate) {
+            // 如果所选日期在当前日期之前，可以执行一些操作，例如清空时间槽容器或显示错误消息
+            console.log('不能选择当前日期及之前的日期！');
+            alert('不能选择当前日期及之前的日期！');
+            return;
+        }
+
+        // 执行 AJAX 请求
+        performAjaxRequest(selectedDate);
     });
+    service_id.addEventListener('change', function () {
+        // 获取选择的服务
+        var selectedService = this.value;
+
+        // 检查是否有日期值
+        if (bookingDateInput.value) {
+            // 如果有日期值，则刷新时间槽
+            performAjaxRequest(bookingDateInput.value);
+        } 
+    });
+
+
+    
             
     function formatTime(date) {
         var hours = date.getHours().toString().padStart(2, '0');
@@ -342,6 +368,11 @@ $('#submitBtn').on('click', function(event) {
 
 
 <style>
+    .error-message {
+    color: red;
+    font-weight: bold;
+    /* 其他样式设置 */
+}
      body {
         font-family: 'Roboto';
     }
