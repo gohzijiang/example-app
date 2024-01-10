@@ -20,11 +20,8 @@ use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
-Route::get('/dashboard', [UserController::class, 'dashboard'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -34,6 +31,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('/dashboard', [UserController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', 'AdminController@dashboard');
@@ -56,6 +56,8 @@ Route::get('/getAvailableIndustrialLines/{date}', [CarWashingController::class, 
 
 Route::post('/search/byUserName',[BookingController::class, 'searchByUserName'] )->name('search.ByUserName');
 Route::post('/search/byDateTime', [BookingController::class, 'searchByDateTime'])->name('search.ByDateTime');
+Route::post('/searchByUserNameAndDateTime', [BookingController::class, 'searchByUserNameAndDateTime'])
+    ->name('search.ByUserNameAndDateTime');
 // routes/web.php
 
 
@@ -64,6 +66,14 @@ Route::get('/admin/business-form', [CarWashingController::class, 'showBusinessFo
 Route::post('/admin/save-business', [CarWashingController::class, 'saveBusiness'])->name('saveBusiness');
 
 Route::get('/index', [BookingController::class, 'index'])->name('bookings.index');
+Route::get('BusinessIndex', [CarWashingController::class, 'index'])->name('BusinessIndex');
+Route::post('/searchBusinessByMonth', [CarWashingController::class, 'searchBusinessByMonth'])
+    ->name('search.BusinessByMonth');
+
+Route::post('/searchBusinessByDates', [CarWashingController::class, 'searchBusinessByDates'])
+    ->name('search.BusinessByDates');
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/index', [BookingController::class, 'userIndex'])->name('user.index');});
@@ -76,23 +86,19 @@ Route::get('/getServiceDuration/{serviceId}', [ServiceController::class, 'getSer
 
 //serach function
 Route::get('/getUserIdByName/{name}', [UserController::class, 'getUserIdByName']);
+Route::get('/getBookedSlots/{date}', [BookingController::class, 'getBookedSlots']);
+
+
 
 
 Route::post('/checkout', [BookingController::class, 'paymentPost'])->name('payment.post');
-/*
+
 Route::post('/bookings/store', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
 
-/*
 
 Route::get('user/booking', [BookingController::class, 'index'])->name('booking');
 Route::post('/bookings', [BookingController::class, 'store'])->name('booking.store');
 
 
 
-/*
-Route::get('admin/insertCategory', [App\Http\Controllers\CategoryController::class, 'insert'])->name('insert.Category');
-Route::post('admin/insertCategory/store', [App\Http\Controllers\CategoryController::class, 'store'])->name('add.Category');
-Route::get('admin/showCategory', [App\Http\Controllers\CategoryController::class, 'show'])->name('show.Category');
-Route::get('admin/deleteCategory/{id}', [App\Http\Controllers\CategoryController::class, 'delete'])->name('delete.Category');
-*/

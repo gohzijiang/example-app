@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layouts.app')
+
+@section('title', 'Page Title')
+
+@section('content')
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" href="path/to/styles.css">
     <!-- Add Slick Carousel Theme CSS -->   
@@ -11,45 +11,12 @@
     <!-- Add jQuery (required by Slick Carousel) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Add Slick Carousel JS -->
+  <!--   Add Slick Carousel JS -->
    
-    <title>Car Washing Services</title>
-</head>
+    
 <body>
-<header>
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">Bookings</a>
-        <a href="#">Service</a>
-        <a href="#">About Us</a>
-        <a href="#">Contact</a>
-    </nav>
-    <div class="auth-links">
-            @if (Route::has('login'))              
-                @auth
-                    <a href="{{ url('/dashboard') }}">Dashboard</a>
-                @else
-                    <a href="{{ route('login') }}">Log in</a>
 
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}">Register</a>
-                    @endif
-                @endauth
-            @endif
-        </div>
-    </header>
-    </nav>
-        <div class="slider-container">
-            <!-- Slides -->
-                <div class="slide"><img src="/image/picture_2.PNG" alt="Slide 1"></div>
-                <div class="slide"><img src="/image/picture_3.PNG" alt="Slide 2"></div>
-                <div class="slide"><img src="/image/picture_4.PNG" alt="Slide 3"></div>
-                <!-- Add more slides as needed -->
-
-                <!-- Navigation Arrows -->
-                <div class="slider-prev">&lt;</div>
-                <div class="slider-next">&gt;</div>
-        </div>
+      
 <footer class="footer">
         <div class="footer-content">
             <br>
@@ -120,21 +87,7 @@
             color: #fff;
         }
 
-        header {
-            background-color: #007BFF;
-            padding: 10px 20px;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
-            color: #fff;
-            margin: 0;
-            font-size: 24px;
-        }
-
+       
         nav {
             display: flex;
         }
@@ -148,7 +101,7 @@
 
         .auth-links {
             display: flex;
-            margin-left: auto; /* 将 auth-links 推到右侧 */
+            margin-left: auto; 
         }
 
         .auth-links a {
@@ -203,5 +156,17 @@
 .socials li {
     margin: 0 10px;
 }
+/* 将 auth-links 推到右侧  <div class="slider-container">
+            <!-- Slides -->
+                <div class="slide"><img src="/image/picture_2.PNG" alt="Slide 1"></div>
+                <div class="slide"><img src="/image/picture_3.PNG" alt="Slide 2"></div>
+                <div class="slide"><img src="/image/picture_4.PNG" alt="Slide 3"></div>
+                <!-- Add more slides as needed -->
 
+                <!-- Navigation Arrows -->
+                <div class="slider-prev">&lt;</div>
+                <div class="slider-next">&gt;</div>
+        </div>*/ 
     </style>
+    @endsection
+   

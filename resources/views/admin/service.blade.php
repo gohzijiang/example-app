@@ -13,8 +13,8 @@
             <table class="table table-hover table-striped">
                 <thead>
                     <tr class="thead-dark">
-                    <th>Service ID</th>
-                        <th>Service</th>
+                    <th>Model ID</th>
+                        <th>Car Model</th>
                         <th>Description:</th>
                         <th>Price:</th>
                         <th>Duration (minutes):</th>

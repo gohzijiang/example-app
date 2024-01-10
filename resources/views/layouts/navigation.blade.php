@@ -13,9 +13,18 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Car Washing Services') }}
-                    </x-nav-link>
+                <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+                    {{ __('Car Washing Services') }}
+                </x-nav-link>
+
+                <x-nav-link :href="route('businessForm')" :active="request()->routeIs('businessForm')">
+                    {{ __('Booking Time Setting ') }}
+                </x-nav-link>
+
+                <x-nav-link :href="route('bookings.index')" :active="request()->routeIs('bookings.index')">
+                    {{ __('View User Bookings ') }}
+                </x-nav-link>
+
                 </div>
             </div>
 

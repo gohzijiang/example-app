@@ -97,3 +97,8 @@
         </div>
     </body>
 </html>
+<style>
+    body{
+        background-image: linear-gradient(rgba(241, 241, 241, 0.6), rgba(156, 154, 154, 0.6)), url("/image/background.PNG");
+    }
+    </style>

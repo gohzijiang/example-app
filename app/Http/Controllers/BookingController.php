@@ -74,14 +74,20 @@ public function showDetails(Booking $booking)
 
 public function index()
 {
-    $bookings = Booking::all(); // 假设你的模型是 Booking
-    
+    $bookings = $this->getTodayBookings();
 
     return view('admin.index', compact('bookings'));
 }
 
+private function getTodayBookings()
+{
+    $bookings = now()->toDateString();
 
+    // 查询数据库，找到匹配日期的预订
+    $bookings = Booking::whereDate('booking_datetime', $bookings)->get();
 
+    return $bookings;
+}
 
 public function getServiceInfo($serviceId)
 {
@@ -91,6 +97,27 @@ public function getServiceInfo($serviceId)
     // 返回服务信息
     return response()->json($service);
 }
+
+public function getBookedSlots(Request $request, $date)
+{
+    // 将传入的日期字符串转换为 Carbon 实例
+    $selectedDate = Carbon::parse($date);
+
+    // 获取指定日期的预订数据，包括 booking_datetime 和 service_id
+    $bookedSlots = Booking::select('booking_datetime', 'service_id')
+        ->with('service') // 加载 service 关联
+        ->whereDate('booking_datetime', $selectedDate->toDateString())
+        ->get();
+
+    // 从关联的服务中获取 duration 字段
+    $bookedSlots->transform(function ($booking) {
+        $booking->duration = optional($booking->service)->duration;
+        return $booking;
+    });
+
+    return response()->json($bookedSlots);
+}
+
 
 public function userIndex()
 {
@@ -129,6 +156,39 @@ public function searchByUserName(Request $request)
     
         return view('admin.index', ['searchByDateTime' => $searchDate, 'bookings' => $bookings]);
     }
+    public function searchByUserNameAndDateTime(Request $request)
+    {
+        $searchByUserName = $request->input('searchByUserName');
+        $searchByDateTime = $request->input('searchByDateTime');
+    
+        // 如果没有提供完整信息，返回 JSON 响应
+        if (!$searchByUserName || !$searchByDateTime) {
+            return response()->json(['error' => 'Please insert complete information']);
+        }
+    
+        // 使用 Carbon 对象来处理日期格式
+        $searchDate = Carbon::parse($searchByDateTime);
+    
+        // 查询数据库，找到匹配用户名和日期的预订
+        $bookings = Booking::join('users', 'bookings.user_id', '=', 'users.id')
+            ->where('users.name', $searchByUserName)
+            ->whereDate('bookings.booking_datetime', $searchDate)
+            ->get();
+    
+        // 如果没有找到匹配的记录，返回 JSON 响应
+        if ($bookings->isEmpty()) {
+            return redirect()->route('bookings.index')->with('error', 'This user has no booking for ' . $searchDate->toDateString());
+        }
+    
+        // 找到记录时，返回视图
+        return view('admin.index', [
+            
+            'searchByUserName' => $searchByUserName,
+            'searchByDateTime' => $searchDate,
+            'bookings' => $bookings,
+        ]);
+    }
+
 
 
 public function paymentPost(Request $request)
@@ -144,6 +204,7 @@ Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
        
     return back();
 }
+
 
 
 

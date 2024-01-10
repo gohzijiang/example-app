@@ -99,7 +99,7 @@ class CarWashingController extends Controller
         }
     }
 
-    // 其他方法...
+
 
     public function showBusinessForm()
     {
@@ -144,4 +144,44 @@ class CarWashingController extends Controller
             return response()->json(['error' => 'No record found for the selected date'], 404);
         }
     }
+    public function index()
+    {
+        // 获取当前月份
+        $currentMonth = now()->format('m');
+
+        // 查询数据库获取当前月份的业务信息
+        $businessData = CarWashingBusiness::whereMonth('dates', $currentMonth)
+            ->get();
+
+        // 返回视图，并将业务信息传递给视图
+        return view('admin.BusinessIndex', ['businessData' => $businessData]);
+    }
+
+    public function searchBusinessByMonth(Request $request)
+{
+    $searchBusinessByMonth = $request->input('searchBusinessByMonth');
+
+    $businessData = CarWashingBusiness::whereMonth('dates', $searchBusinessByMonth)
+            ->get();
+            if ($businessData->isEmpty()) {
+                return redirect()->route('BusinessIndex')->with('error', 'Select month haven`t setting for online booking ');
+            }
+    // 返回视图，并将业务信息传递给视图
+    return view('admin.BusinessIndex', ['businessData' => $businessData]);
+}
+
+public function searchBusinessByDates(Request $request)
+{
+    $searchBusinessByDate = $request->input('searchByDate');
+
+    $businessData = CarWashingBusiness::whereDate('dates', $searchBusinessByDate)
+        ->get();
+
+    if ($businessData->isEmpty()) {
+        return redirect()->route('BusinessIndex')->with('error', 'No business setting for the selected date');
+    }
+
+    return view('admin.BusinessIndex', ['businessData' => $businessData]);
+}
+
 }

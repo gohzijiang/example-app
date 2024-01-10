@@ -55,6 +55,22 @@
                 </form>
             </ul>
         </div>
+        @if(session('error'))
+            <script>
+                alert("{{ session('error') }}");
+            </script>
+        @endif
+        <div class="col-md-3">
+            <ul class="navbar-nav" style="margin-top: 8px;">
+                <form id="combinedSearchForm" class="form-inline active-cyan-4" action="{{ route('search.ByUserNameAndDateTime') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="searchByUserName" id="combinedSearchByUserName">
+                    <input type="hidden" name="searchByDateTime" id="combinedSearchByDateTime">
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="submitCombinedSearch()">Search By User and Date</button>
+                </form>
+            </ul>
+        </div>
     </div>
             <div class="row">
                 <table class="table">
@@ -62,9 +78,9 @@
                         <tr>
                             <th>ID</th>
                             <th>User Name</th>
-                            <th>Service</th>
+                            <th>Car Size</th>
                             <th>Date Time</th>
-                            <th>Last Name</th>
+                            <th>License plate</th>
                             <th>phone_number </th>
                             <th>Email</th>
                             <th>Noted</th>
@@ -73,9 +89,15 @@
                     </thead>
 
                     <tbody>
-                        @if($bookings->isEmpty())
-                            <p>No bookings available.</p>
+                    @if($bookings->isEmpty())
+                        @if(isset($searchByDateTime))
+                            <p>No bookings available for {{ $searchByDateTime->format('Y-m-d') }}.</p>
+                        @elseif(isset($searchByUserName))
+                            <p>No bookings available for {{ $searchByUserName }}.</p>
                         @else
+                            <p>No bookings available for today.</p>
+                        @endif
+                    @else
                             @foreach($bookings as $booking)
                                 <tr>
                                     <!-- 如果您有服务的信息，可以通过 $booking->service 来获取 -->
@@ -134,6 +156,36 @@
             });
         });
     });
+    function submitCombinedSearch() {
+    // 获取用户名和日期的值
+    var userName = document.getElementById('searchByUserName').value;
+    var searchByDateTimeElement = document.getElementById('datepicker');
+    var searchByDateTime = searchByDateTimeElement.value;
+
+    console.log(userName);
+    console.log(searchByDateTime);
+    
+    if (userName.trim() === '') {
+        alert('Please insert user name');
+        return;  // 终止函数
+    }
+    if (searchByDateTime.trim() === '') {
+        alert('Please insert the date');
+        return;  // 终止函数
+    }
+
+    // 将值填入联合搜索表单的对应字段
+    document.getElementById('combinedSearchByUserName').value = userName;
+    document.getElementById('combinedSearchByDateTime').value = searchByDateTime;
+
+    // 设置联合搜索表单的提交方法为 POST
+    document.getElementById('combinedSearchForm').method = 'POST';
+
+    document.getElementById('combinedSearchForm').submit();
+}
+
 </script>
+
+
 
 @endsection

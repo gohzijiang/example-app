@@ -18,7 +18,7 @@
     <div class="form-group">
         <label for="service_id">Service</label>
         <select id="service_id" type="text" class="form-control @error('service_id') is-invalid @enderror" name="service_id" value="{{ old('service_id') }}" required autocomplete="service_id" autofocus>
-            <option value="">-- Select Service --</option>
+            <option value="">-- Select Size Car --</option>
             @foreach($services as $service)
                 <option value="{{ $service->id }}">{{ $service->name }}</option>
             @endforeach
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var bookingDateInput = document.getElementById('booking_date');
     var timeSlotContainer = document.getElementById('timeSlotContainer');
     var serviceDurationElement = document.getElementById('serviceDuration');
-
+    
     // 设置最小日期为明天
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -153,11 +153,16 @@ document.addEventListener("DOMContentLoaded", function () {
             $.ajax({
                 type: 'GET',
                 url: '/getAvailableIndustrialLines/' + selectedDate,
+            }),
+            $.ajax({
+                type: 'GET',
+                url: '/getBookedSlots/' + selectedDate,
             })
-        ).done(function (openCloseResponse, linesResponse) {
+        ).done(function (openCloseResponse, linesResponse,bookedSlotsResponse) {
             // 处理获取时间槽数据的响应
             var openCloseData = openCloseResponse[0];
-
+            var bookedData = bookedSlotsResponse[0];
+            console.log(bookedData);
             if (openCloseData.error) {
                 // 显示错误消息
                 console.error(openCloseData.error);
@@ -177,6 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // 处理获取工业线数量的响应
                 var linesData = linesResponse[0];
+                
                 var availableLines = linesData.availableLines;
 
                 // 在页面上显示工业线数量
@@ -196,8 +202,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     var timeslotDiv = document.createElement('div');
                     timeslotDiv.classList.add('timeslot');
 
+                    var currentTimeString = formatTime(currentTime);
                     // 获取当前时间槽的值
                     timeslotDiv.textContent = formatTime(currentTime);
+                    if (isSlotBooked(currentTimeString, bookedData,getDuration())) {
+                        timeslotDiv.classList.add('booked-slot', 'light-green-slot');
+                            timeslotDiv.style.backgroundColor = 'lightgreen'; // 设置背景颜色
+                            timeslotDiv.style.pointerEvents = 'none'; // 禁用被预订的时间槽
+                    }   
+
+
                     timeSlotContainer.appendChild(timeslotDiv);
 
                     // 保存当前时间，以便稍后调整
@@ -217,8 +231,53 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 页面加载时执行一次
     
+    
+    function isSlotBooked(currentTimeString, bookedData, serviceDuration) {
+    // 将 serviceDuration 转换为分钟
+    var serviceDurationMinutes = serviceDuration;
+
+    return bookedData.some(function (booking) {
+        // 将预订的时间字符串转换为 Date 对象
+        var bookingTime = new Date(booking.booking_datetime);
+        // 获取当前时间槽的小时和分钟
+        var currentHour = parseInt(currentTimeString.split(':')[0], 10);
+        var currentMinute = parseInt(currentTimeString.split(':')[1], 10);
+        // 获取预订的小时和分钟以及预订的结束时间和持续时间
+        var bookingHour = bookingTime.getHours();
+        var bookingMinute = bookingTime.getMinutes();
+        var bookingEndTime = new Date(bookingTime.getTime() + booking.duration * 60000 - 1); // 减去 1 毫秒
+
+        // 判断整个时间槽是否被占用
+        var isTimeSlotBooked = false;
+
+        // 遍历所有的服务持续时间（服务的 duration）
+        for (var i = 0; i < serviceDurationMinutes; i++) {
+            // 计算当前时间槽的小时和分钟
+            var currentTimeSlotHour = currentHour;
+            var currentTimeSlotMinute = currentMinute + i;
+
+            // 超过 60 分钟时进位
+            if (currentTimeSlotMinute >= 60) {
+                currentTimeSlotHour++;
+                currentTimeSlotMinute -= 60;
+            }
+
+            // 检查当前时间槽是否与预订的时间重叠
+            if (
+                currentTimeSlotHour >= bookingHour &&
+                currentTimeSlotMinute >= bookingMinute &&
+                currentTimeSlotHour <= bookingEndTime.getHours() &&
+                currentTimeSlotMinute <= bookingEndTime.getMinutes()
+            ) {
+                isTimeSlotBooked = true;
+                break;  // 如果有任何一个时间被占用，立即跳出循环
+            }
+        }
+
+        return isTimeSlotBooked;
+    });
+}
 
     // 监听日期选择框的变化
     bookingDateInput.addEventListener('change', function () {
@@ -368,6 +427,9 @@ $('#submitBtn').on('click', function(event) {
 
 
 <style>
+    .light-green-slot {
+    background-color: lightgreen; /* 或者你想要的颜色 */
+}
     .error-message {
     color: red;
     font-weight: bold;
