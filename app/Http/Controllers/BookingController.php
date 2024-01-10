@@ -80,6 +80,12 @@ public function index()
 
     return view('admin.index', compact('bookings'));
 }
+public function indexAll()
+{
+    $bookings = Booking::all(); // Use the correct model name and method to retrieve all bookings
+
+    return view('admin.index', compact('bookings'));
+}
 
 private function getTodayBookings()
 {

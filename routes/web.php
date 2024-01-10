@@ -66,6 +66,8 @@ Route::post('/admin/create-business', [CarWashingController::class, 'createBusin
 Route::get('/admin/business-form', [CarWashingController::class, 'showBusinessForm'])->name('businessForm');
 Route::post('/admin/save-business', [CarWashingController::class, 'saveBusiness'])->name('saveBusiness');
 
+
+
 Route::get('/index', [BookingController::class, 'index'])->name('bookings.index');
 Route::get('BusinessIndex', [CarWashingController::class, 'index'])->name('BusinessIndex');
 Route::post('/searchBusinessByMonth', [CarWashingController::class, 'searchBusinessByMonth'])
@@ -73,7 +75,7 @@ Route::post('/searchBusinessByMonth', [CarWashingController::class, 'searchBusin
 
 Route::post('/searchBusinessByDates', [CarWashingController::class, 'searchBusinessByDates'])
     ->name('search.BusinessByDates');
-
+    Route::post('/index/all', [BookingController::class, 'indexAll'])->name('bookings.all');
 
 
 Route::middleware(['auth'])->group(function () {

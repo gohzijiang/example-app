@@ -71,6 +71,18 @@
                 </form>
             </ul>
         </div>
+        <div class="col-md-3">
+        <ul class="navbar-nav" style="margin-top: 8px;">
+            <a href="{{ route('bookings.all') }}" class="btn btn-primary btn-sm" onclick="event.preventDefault(); document.getElementById('all-bookings-form').submit();">
+                All Booking
+            </a>
+            <form id="all-bookings-form" action="{{ route('bookings.all') }}" method="post" style="display: none;">
+                @csrf
+            </form>
+        </ul>
+        </div>
+        
+    </li>
     </div>
             <div class="row">
                 <table class="table">
