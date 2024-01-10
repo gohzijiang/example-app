@@ -43,11 +43,9 @@ Route::get('admin/insertService', [ServiceController::class, 'create'])->name('s
 Route::post('admin/services', [ServiceController::class, 'store'])->name('services.store'); 
 Route::post('/bookings', [BookingController::class,'create'])->name('bookings.store');
 Route::get('/service', [ServiceController::class, 'index'])->name('services.index');
+Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy');
 
-
-
-
-Route::get('/bookings/create', [BookingController::class, 'create']);
+Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
 Route::get('/bookings', [BookingController::class, 'index']);
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/booking/details/{booking}', [BookingController::class, 'showDetails'])->name('booking.details');
@@ -58,6 +56,9 @@ Route::post('/search/byUserName',[BookingController::class, 'searchByUserName'] 
 Route::post('/search/byDateTime', [BookingController::class, 'searchByDateTime'])->name('search.ByDateTime');
 Route::post('/searchByUserNameAndDateTime', [BookingController::class, 'searchByUserNameAndDateTime'])
     ->name('search.ByUserNameAndDateTime');
+    //userSearching
+    Route::post('/userSearch/byUserName', [BookingController::class, 'userSearchBusinessByDates'])
+    ->name('search.userSearchBusinessByDates');
 // routes/web.php
 
 
@@ -76,10 +77,8 @@ Route::post('/searchBusinessByDates', [CarWashingController::class, 'searchBusin
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/user/index', [BookingController::class, 'userIndex'])->name('user.index');});
-
-    
-Route::get('/getOpenCloseTime/{selected_date}', [CarWashingController::class, 'getOpenCloseTime']);
+Route::get('/user/index', [BookingController::class, 'userIndex'])->name('user.index');});
+ Route::get('/getOpenCloseTime/{selected_date}', [CarWashingController::class, 'getOpenCloseTime']);
 Route::get('/getServiceDuration/{serviceId}', [ServiceController::class, 'getServiceDuration']);
 
 

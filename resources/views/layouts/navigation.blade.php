@@ -12,28 +12,74 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
-                    {{ __('Car Washing Services') }}
-                </x-nav-link>
+                @auth
+    @if(Auth::check() && (Auth::user()->is_admin == 1 || Auth::user()->role == 'admin'))
+        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+            <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+                {{ __('Car Washing Services') }}
+            </x-nav-link>
 
-                <x-nav-link :href="route('businessForm')" :active="request()->routeIs('businessForm')">
-                    {{ __('Booking Time Setting ') }}
-                </x-nav-link>
+            <x-nav-link :href="route('businessForm')" :active="request()->routeIs('businessForm')">
+                {{ __('Booking Time Setting') }}
+            </x-nav-link>
 
-                <x-nav-link :href="route('bookings.index')" :active="request()->routeIs('bookings.index')">
-                    {{ __('View User Bookings ') }}
-                </x-nav-link>
+            <x-nav-link :href="route('BusinessIndex')" :active="request()->routeIs('BusinessIndex')">
+                {{ __('Operation Time List') }}
+            </x-nav-link>
 
-                </div>
-            </div>
+            <x-nav-link :href="route('bookings.create')" :active="request()->routeIs('bookings.create')">
+                {{ __('Try Booking') }}
+            </x-nav-link>
+
+            <x-nav-link :href="route('bookings.index')" :active="request()->routeIs('bookings.index')">
+                {{ __('View User Bookings') }}
+            </x-nav-link>
+
+            <x-nav-link :href="route('services.create')" :active="request()->routeIs('services.create')">
+                {{ __('Generate a New Car Size') }}
+            </x-nav-link>
+
+            <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
+                {{ __('View All Car Model') }}
+            </x-nav-link>
+        </div>
+    @endif
+@else
+    <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+        {{ __('Car Washing Services') }}
+    </x-nav-link>
+
+    <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
+        {{ __('Login') }}
+    </x-nav-link>
+
+    <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
+        {{ __('Register') }}
+    </x-nav-link>
+@endauth
+@if(Auth::check() && (Auth::user()->is_admin == 0 || Auth::user()->role == 'user'))
+<x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+        {{ __('Car Washing Services') }}
+    </x-nav-link>
+<x-nav-link :href="route('bookings.create')" :active="request()->routeIs('bookings.create')">
+    {{ __('Start Booking') }}
+</x-nav-link>
+
+<x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
+    {{ __('View Booking') }}
+</x-nav-link>
+@endif  
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                        @auth
+                                <div>{{ Auth::user()->name }}</div>
+                            @else
+                                <a href="{{ route('register') }}" class="login-link">Register</a>
+                            @endauth
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -84,10 +130,15 @@
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+        <div class="px-4">
+    @if(!empty(Auth::user()->name))
+        <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+    @endif
+
+    @if(!empty(Auth::user()->email))
+        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+    @endif
+</div>
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">

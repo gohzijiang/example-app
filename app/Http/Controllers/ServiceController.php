@@ -56,5 +56,20 @@ public function getServiceDuration($serviceId)
         return response()->json(['error' => 'No record found for the selected service'], 404);
     }
 }
-    
+   
+public function destroy($id)
+{
+    // Find the service by ID
+    $service = Service::find($id);
+
+    // Check if the service exists
+    if (!$service) {
+        return redirect()->route('services.index')->with('error', 'Service not found!');
+    }
+
+    // Delete the service
+    $service->delete();
+
+    return redirect()->route('services.index')->with('success', 'Service deleted successfully!');
+}
 }

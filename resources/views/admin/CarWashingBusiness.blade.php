@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
+@section('content')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,29 +10,43 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
-
-<h2>Car Washing Business Setup</h2>
+<div class="center-container">
+        <h1>Car Washing Business Setup</h1>
+    </div>
 <!-- 修改表单 -->
-<form method="post" action="{{ route('saveBusiness') }}">
+<div class="form-container">
+    <form action="{{  route('saveBusiness') }}" method="POST">
     @csrf
+  
+    <p>
+        <label for="industrial_lines" class="label">Industrial Lines:</label>
+        <br>
+        <input type="number" name="industrial_lines" id="industrial_lines" min="1" max="4" value="1" required>
+    </p>
 
-    <label for="industrial_lines">Industrial Lines:</label>
-    <input type="number" name="industrial_lines" id="industrial_lines" min="1" max="4" value="2" required>
+    <p>
+        <label for="dates" class="label">Select Dates:</label>
+        <br>
+        <input type="text" name="dates" id="dates" required>
+        <input type="hidden" name="selected_dates" id="selected_dates">
+    </p>
 
-    <!-- 多个日期选择 -->
-    <label for="dates">Select Dates:</label>
-    <input type="text" name="dates" id="dates" required>
-    <input type="hidden" name="selected_dates" id="selected_dates">
+    <p>
+        <label for="open_time" class="label">Open Time:</label>
+        <br>
+        <input type="text" name="open_time" id="open_time" required>
+    </p>
 
-    <label for="open_time">Open Time:</label>
-    <input type="text" name="open_time" id="open_time" required>
-
-    <label for="close_time">Close Time:</label>
-    <input type="text" name="close_time" id="close_time" required>
+    <p>
+        <label for="close_time" class="label">Close Time:</label>
+        <br>
+        <input type="text" name="close_time" id="close_time" required>
+    </p>
 
     <button type="submit">Save</button>
 </form>
 
+</div>
 <!-- 初始化 flatpickr -->
 <script>
     function adjustFieldsBasedOnDates(selectedDates, instance) {
@@ -124,3 +138,41 @@
 </script>
 </body>
 </html>
+<style>
+     h1 {
+        font-size: 36px; /* Adjust the font size as needed */
+        font-weight: bold;
+        text-align: center;
+    }
+     .form-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; /* Adjust as needed */
+    }
+        body {
+           
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            width: 300px; /* Adjust the width as needed */
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%; /* Make the input fields take the full width of the form */
+            margin-bottom: 10px; /* Add some space between input fields */
+        }
+
+        button {
+            width: 100%; /* Make the button take the full width of the form */
+        }
+    </style>
+@endsection

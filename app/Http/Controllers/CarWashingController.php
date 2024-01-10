@@ -92,7 +92,14 @@ class CarWashingController extends Controller
 
             // 其他逻辑...
 
-            return redirect()->route('businessForm')->with('success', 'Business setup saved successfully!');
+            $currentMonth = now()->format('m');
+
+            // 查询数据库获取当前月份的业务信息
+            $businessData = CarWashingBusiness::whereMonth('dates', $currentMonth)
+                ->get();
+    
+            // 返回视图，并将业务信息传递给视图
+            return view('admin.BusinessIndex', ['businessData' => $businessData]);
         } catch (\Exception $e) {
             // 输出异常消息
             dd($e->getMessage(), $request->all());

@@ -55,6 +55,8 @@ public function store(Request $request)
 
 
     // 重定向到 booking.details 路由，并传递预订的 ID
+    $bookings = $this->getTodayBookings();
+
     return redirect()->route('booking.details', ['booking' => $booking->id]);
 }
 
@@ -125,13 +127,12 @@ public function userIndex()
     $user = Auth::user();
 
     // 获取该用户的服务
-    $userServices = Service::where('    ', $user->id)->get();
 
     // 获取用户的预订信息
     $userBookings = Booking::where('user_id', $user->id)->get();
 
     // 将数据传递到视图
-    return view('user.index', ['userServices' => $userServices, 'userBookings' => $userBookings]);
+    return view('user.userIndex', ['bookings' => $userBookings]);
 }
 
 public function searchByUserName(Request $request)
@@ -189,11 +190,28 @@ public function searchByUserName(Request $request)
         ]);
     }
 
+    public function userSearchBusinessByDates(Request $request)
+{
+    // 获取当前认证用户的ID
+    $userId = Auth::id(); // 获取当前用户的 ID
 
+
+    // 获取用户选择的日期
+    $searchDate = $request->input('UserSearchByDateTime');
+
+    // 使用 Carbon 对象来处理日期格式
+    $searchDate = Carbon::parse($searchDate);
+
+    // 查询数据库，找到匹配日期的预订
+    $bookings = Booking::where('user_id', $userId)
+        ->whereDate('booking_datetime', $searchDate)
+        ->get();
+
+    return view('user.userIndex', ['UserSearchByDateTime' => $searchDate, 'bookings' => $bookings]);
+}
 
 public function paymentPost(Request $request)
 {
-       
 Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
     Stripe\Charge::create ([
             "amount" => $request->total_price * 100,   // RM10  10=10 cen 10*100=1000 cen
@@ -201,8 +219,12 @@ Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
             "source" => $request->stripeToken,
             "description" => "This payment is testing purpose of southern online",
     ]);
-       
-    return back();
+    $user = Auth::user();
+    $userBookings = Booking::where('user_id', $user->id)->get();
+
+    // 将数据传递到视图
+    return view('user.userIndex', ['bookings' => $userBookings]);  
+
 }
 
 

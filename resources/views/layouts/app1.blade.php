@@ -41,7 +41,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
 
-                            
+                        <a class="dropdown-item" href="{{ route('services.index') }}">{{ __('#') }}</a>
                         <!-- Right Side Of Navbar -->
                         <ul class="navbar-nav ml-auto"  style="float: right;">
                             <!-- Authentication Links -->
@@ -98,6 +98,9 @@
     </body>
 </html>
 <style>
+    .dropdown-item {
+    color: white !important;
+}
     body{
         background-image: linear-gradient(rgba(241, 241, 241, 0.6), rgba(156, 154, 154, 0.6)), url("/image/background.PNG");
     }

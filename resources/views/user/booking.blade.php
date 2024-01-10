@@ -1,9 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking</title>
+@extends('layouts.app')
+
+@section('title', 'Page Title')
+
+@section('content')
+
+@guest
+    @if (Route::has('login'))
+        <script>
+            window.location.href='{{ route('login') }}'
+        </script>
+    @endif
+@else
+    @if (Auth::user()->is_admin == 0)
+        @if(Session::has('success'))           
+            <div class="alert alert-success" role="alert">
+                {{ Session::get('success')}}
+            </div>       
+        @endif 
+    @endif
+@endif
+ 
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">  
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500&family=Catamaran:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/css/intlTelInput.min.css">
+    
     <link rel="stylesheet" href="{{ asset('css/booking.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
@@ -13,10 +39,10 @@
         <form method="POST" action="{{ route('bookings.store') }}">
     @csrf
 
-    <div>{{ Auth::user()->id }}</div>
+    <div style="display: none;">{{ Auth::user()->id }}</div>
     <input type="hidden" id="user_id_input" name="user_id" value="{{ Auth::user()->id }}">
     <div class="form-group">
-        <label for="service_id">Service</label>
+        <label for="service_id">Car Model</label>
         <select id="service_id" type="text" class="form-control @error('service_id') is-invalid @enderror" name="service_id" value="{{ old('service_id') }}" required autocomplete="service_id" autofocus>
             <option value="">-- Select Size Car --</option>
             @foreach($services as $service)
@@ -40,25 +66,27 @@
         <span id="openTime"></span>
         <span id="closeTime"></span>
         <span id="availableLines"></span>
-        <div id="selectedTimeLabel" style="display:none;"></div>
-    <div class="form-group" id="timeSlotContainer" style="height:280px; width: 700px; overflow:scroll; border: 1px solid #ddd;">
-    <label for="booking_time">Booking Time </label>
-        <!-- 时间槽内容 -->
+    <div id="selectedTimeLabel" style="display:none;"></div>
+            <div class="form-group" id="timeSlotContainer" style="height:280px; width: 700px; overflow:scroll; border: 1px solid #ddd;">
+            <label for="booking_time">Booking Time </label>
+                <!-- time slot container -->
     </div>
-    <input type="hidden" id="booking_datetime_input" name="booking_datetime">
+    <input type="hidden" id="booking_datetime_input" name="booking_datetime" style="font-weight: bold; color: #333;">
+
     
     <div class="form-group">
         <label for="phone_number">Phone Number</label>
-        <input id="phone_number" type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number') }}" required autocomplete="phone_number" autofocus>
+        <input id="phone_number" type="tel" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" required autocomplete="phone_number" autofocus>
         @error('phone_number')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>
         @enderror
     </div>
+    <div id="country-selector"></div>
 
     <div class="form-group">
-    <label for="name">Name</label>
+    <label for="name">license plate number</label>
     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
     @error('name')
         <span class="invalid-feedback" role="alert">
@@ -201,13 +229,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 while (currentTime < closeTime) {
                     var timeslotDiv = document.createElement('div');
                     timeslotDiv.classList.add('timeslot');
-
+                   
                     var currentTimeString = formatTime(currentTime);
+                    timeslotDiv.style.height = '60px'; // 根据需要设置高度值
+
+                    // 让内容垂直居中
+                   
+                    timeslotDiv.style.alignItems = 'center';
+                    timeslotDiv.style.justifyContent = 'center';
                     // 获取当前时间槽的值
                     timeslotDiv.textContent = formatTime(currentTime);
                     if (isSlotBooked(currentTimeString, bookedData,getDuration())) {
                         timeslotDiv.classList.add('booked-slot', 'light-green-slot');
-                            timeslotDiv.style.backgroundColor = 'lightgreen'; // 设置背景颜色
+                            timeslotDiv.style.backgroundColor = 'grey'; // 设置背景颜色
                             timeslotDiv.style.pointerEvents = 'none'; // 禁用被预订的时间槽
                     }   
 
@@ -424,9 +458,11 @@ $('#submitBtn').on('click', function(event) {
    
 </script>
 
-
-
 <style>
+    #booking_datetime_input {
+    font-weight: bold;
+    color: #333;
+}
     .light-green-slot {
     background-color: lightgreen; /* 或者你想要的颜色 */
 }
@@ -475,3 +511,5 @@ $('#submitBtn').on('click', function(event) {
         cursor: pointer;
     }
 </style>
+@endsection
+   
